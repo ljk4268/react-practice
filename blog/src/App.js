@@ -37,7 +37,7 @@ function App() {
 
       <button onClick={ ()=>{
         let copy = [...title];
-        copy.sort()
+        copy.sort() // 가나다순 정렬해주는 sort()함수를 써줌. 
         setTitle(copy)
       }} >가나다순정렬</button>
 
@@ -61,8 +61,31 @@ function App() {
         <h4>{title[2]}</h4>
         <p>2월 17일 발행</p>
       </div>
-    </div>
+
+      {/* 아래처럼 쓰면 html이 더러워짐  
+      리액트에서 컴포넌트 문법으로 깔끔하게 한단어로 축약해서 쓸 수 있게 도와즘!
+      내 코트를 처음 보는 사람도 이해하기 쉬움!*/}
+      
+      {/* components 문법 만드는 법 
+      1. function을 만들고 - html밖에 만들어야함 
+      2. return()안에 html 담고
+      3.<함수명></함수명> or <함수명/>쓰기!*/}
+
+      <Modal></Modal>
+
+  </div>
   );
+}
+
+// 컴포넌트문법 만드는 방법 첫번쨰!
+function Modal(){
+  return(
+    <div className="modal">
+      <h4>제목</h4>
+      <p>날짜</p>
+      <p>상세내용</p>
+    </div>
+  )
 }
 
 export default App;
