@@ -12,7 +12,7 @@ function App() {
   // [b] = state 내용 변경을 도와주는 함수.
   // useState안에 들어있는 내용이 변경되면 자동으로 랜더링 해주니 꼭 기억해줘! 
   let [title, setTitle] = useState(['남자 코트 추천','여자 코트 추천','여자 부츠 추천']);
-  let [count, setCount] = useState(0);
+  let [count, setCount] = useState([0,0,0]);
   let [modal, setModal] = useState(false);
 
   
@@ -46,7 +46,7 @@ function App() {
       {/* onClick함수 사용하는 방법  
       - onClick={()=>{}}
       - 클릭했을 때 실행하고 싶은 함수의 이름만 써야한다. */}
-      <div className="list">
+      {/* <div className="list">
         <h4>
           {title[0]} 
           <span onClick={()=>{ setCount(count+1) }}>👍🏻</span> 
@@ -61,7 +61,33 @@ function App() {
       <div className="list">
         <h4 onClick={()=>{ setModal(!modal) }}>{title[2]}</h4>
         <p>2월 17일 발행</p>
-      </div>
+      </div> */}
+
+      {/* 아래코드와 위 코드는 동일 */}
+
+      {
+        title.map(function(a, i){
+          return (
+              <div className="list" key={i}>
+                <h4 onClick={()=>{ setModal(!modal) }}>
+                  {title[i]}
+                  {/* 각 제목 옆에 좋아요 갯수를 보여준다. */}
+                  {/* 좋아요 갯수를 state 배열로 3개 만들고  */}
+                  {/* 새로운 변수에 deepcopy를 해준다.  */}
+                  {/* 제목이 눌릴때마다 새로운 변수의 i번째 배열에 +1을 해주고 */}
+                  {/* setCount로 count state에 copy변수를 할당해준다.  */}
+                  <span onClick={()=>{ 
+                    let copy = [...count]
+                    copy[i] ++
+                    setCount(copy)
+                  }}>👍🏻</span> 
+                  {count[i]} 
+                </h4>
+                <p>2월 17일 발행</p>
+              </div>
+            )
+        })
+      }
 
       {/* 아래처럼 쓰면 html이 더러워짐  
       리액트에서 컴포넌트 문법으로 깔끔하게 한단어로 축약해서 쓸 수 있게 도와즘!
