@@ -13,6 +13,7 @@ function App() {
   // useState안에 들어있는 내용이 변경되면 자동으로 랜더링 해주니 꼭 기억해줘! 
   let [title, setTitle] = useState(['남자 코트 추천','여자 코트 추천','여자 부츠 추천']);
   let [count, setCount] = useState(0);
+  let [modal, setModal] = useState(false);
 
   
 
@@ -58,7 +59,7 @@ function App() {
         <p>2월 17일 발행</p>
       </div>
       <div className="list">
-        <h4>{title[2]}</h4>
+        <h4 onClick={()=>{ setModal(!modal) }}>{title[2]}</h4>
         <p>2월 17일 발행</p>
       </div>
 
@@ -71,7 +72,28 @@ function App() {
       2. return()안에 html 담고
       3.<함수명></함수명> or <함수명/>쓰기!*/}
 
-      <Modal></Modal>
+
+      {/* 제목을 누르면 Modal창이 보이게 하는 방법! */}
+
+      {/* [ 동적인 UI 만드는 Step ] 
+
+      1. html css로 미리 디자인 완성해둔다 
+      2. UI현재 상태를 state로 저장한다. >> state로 만들면 됨. 
+      3. state에 따라 UI가 어떻게 보일지 작성한다. >> 삼항연산자로 */}
+
+      {/* state가 true이면 아래 컴포넌트문법으로 만든 html을 보여달라! */}
+      
+      {/* 자바스크립트 문법을 쓰고 싶으면 {중괄호}넣고 안에 쓰자!  */}
+      {/* 근데 if문이나 for문법을 쓸 수 없다. html넣는 공간이라서 안됨! 
+      대신 if문 대용으로 삼항연산자 쓰면 된다.  */}
+      {/* 정리하면 html안에 조건문 쓰고 싶으면 삼항연산자를 쓰자 */}
+
+      {
+        // 삼항연산자 : 조건식 ? 참일 때 실행할 코드 :  거짓일 때 실행할 코드
+
+        modal == true ? <Modal/> : null
+
+      }
 
   </div>
   );
