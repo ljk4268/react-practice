@@ -5,7 +5,6 @@ import './App.css';
 
 function App() {
 
-  let post = '강남 우동 맛집'
   // 리액트에서의 변수는 useState를 씀. 
   // useState를 import 해와서 let[작명,작명]에 넣어두면 됨. 
   // [a] = state에 보관한 자료. html안에 {a}이렇게 쓰면 a에 들어가있는 변수내용이 들어감.
@@ -15,7 +14,11 @@ function App() {
   let [count, setCount] = useState([0,0,0]);
   let [modal, setModal] = useState(false);
 
-  
+  function changeTitle(){
+    let copy = [...title];
+    copy[0] = '여자 코트 추천'
+    setTitle(copy)
+  }
 
   return (
     <div className="App">
@@ -117,7 +120,10 @@ function App() {
       {
         // 삼항연산자 : 조건식 ? 참일 때 실행할 코드 :  거짓일 때 실행할 코드
 
-        modal == true ? <Modal/> : null
+        // 자식한테 state 전송하는 방법 
+        modal == true ? <Modal title={title} color={'#e1f5fe'}
+        changeTitle={changeTitle}
+        /> : null
 
       }
 
@@ -126,12 +132,15 @@ function App() {
 }
 
 // 컴포넌트문법 만드는 방법 첫번쨰!
-function Modal(){
+// props 파라미터 등록후 '{props.작명}' 사용하면 됨
+function Modal(props){
   return(
-    <div className="modal">
-      <h4>제목</h4>
+    <div className="modal" style={{background : props.color}}>
+      <h4>{props.title[0]}</h4>
       <p>날짜</p>
       <p>상세내용</p>
+      {/* 버튼 누르면 첫 글제목이 '여자코트추천'으로 바뀌는 기능 */}
+      <button onClick={()=>{props.changeTitle()}}>글수정</button>
     </div>
   )
 }
