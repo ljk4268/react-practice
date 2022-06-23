@@ -1,3 +1,11 @@
+.main-bg{
+  height: 300px;
+  background-image: url('./bg.png');
+  background-size: cover;
+  /* 사진 가운데 정렬 - 창크기를 늘리고 줄여도 사진이 가운데에 있음 */
+  background-position: center;
+}
+
 .App {
   text-align: center;
 }
