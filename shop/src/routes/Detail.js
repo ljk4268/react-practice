@@ -10,28 +10,30 @@ import { useParams } from "react-router-dom";
 
 function Detail(props){
 
-  // useEffect안에 적힌 코드들은 컴포넌트가 mount될 때와 update될 때 실행된다.
-  // useEffect를 언제 쓸까? 
-  // useEffect는 실행시점이 살짝 다르다. 
-  // useEffect는 html이 렌더링 다 된 후에 동작한다. 
-  // 그래서 useEffect안에 적는 코드들은 
-  // 어려운 연산 혹은 서버에서 데이터가져오는 작업 , 타이머 장착하는 코드를 적는다.
+  // useEffect 실행조건을 넣을 수 있는 곳은 []
+  // [] 가 없을 땐 mount, update 될 때 useEffect가 실행
+  // [] 안에 조건을 넣어주면 그 조건에 해당되는 usestate가 변할 때 useEffext가 실행됨 
   useEffect(() => {
-    setTimeout(() => { setAlert(false) },2000)
-  })
+    let a = setTimeout(() => { setAlert(false) },2000)
+    // useEffect가 실행하기 전에 실행되는 return()=>{}
+    // return()=>{}의 별명은 clean up function
+    // 리액트의 특성상 재렌더링이 많은데, 재렌더링 할 때마다 타이머함수의 경우 계속 발생되니까 기존 타이머함수는 제거해달라는 코드를 작성하면 좋다. 
+    return ()=>{
+      clearTimeout(a)
+    }
+  },[])
+
 
   let [count, setCount] = useState(0)
   let [alert, setAlert] = useState(true)
+  let [num, setNum] = useState('')
 
   let {id} = useParams();
   let shoe = props.shoes.find(shoe => shoe.id == id)
 
   return(
     <div className="container">
-
-      {/* 동적 UI를 위해 AlertModal 컴포넌트를 만들고 */}
-      {/* UI현재 상태를 state로 저장해둠.  */}
-      {/* 2초뒤에 사라질 수 있게 useEffect안에 setTimeout함수를 사용 */}
+      <input onChange={(e)=>{ setNum(e.target.value) }}/>
 
       {
         alert == true ? <AlertModal/> : null
