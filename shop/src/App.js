@@ -12,6 +12,8 @@ import Detail from './routes/Detail'
 function App() {
 
   let [shoes, setShoes] = useState(data)
+  let [count, setCount] = useState(0)
+  let [show, setShow] = useState(true)
   let navigate = useNavigate();
 
 
@@ -40,7 +42,7 @@ function App() {
               {
                 shoes.map(function(shoe, i){
                   return(
-                  <ShoesList shoe={shoe} i={i} navigate={navigate}></ShoesList>
+                  <ShoesList shoe={shoe} i={i} navigate={navigate} key={i}></ShoesList>
                   )
                 })
               } 
@@ -48,17 +50,49 @@ function App() {
               </div>
             </div> 
             {/* axios로 서버요청하기 */}
-            <button onClick={()=>{ 
-              axios.get('https://codingapple1.github.io/shop/data2.json')
-              .then((result)=>{
-                // 서버에서 받아온 데이터로 새로운 shoesList만들기
-                let copy = [...shoes]
-                copy.push(...result.data)
-                setShoes(copy)
-              })
-              // 서버요청이 실패했을 때는 catch!
-              .catch(()=>{console.log('실패')})
-            }}>버튼</button>
+            {/* 응용1. 버튼을 2번 누르면 7,8,9번 상품을 가져와서 html로 보여주려면? */}
+            {/* 응용2. 버튼을 3번 누르면 더 상품이 없다고 안내문을 띄우려면? */}
+            {/* 응용3. 버튼을 누른 직후엔 "로딩중입니다" 이런 글자를 주변에 띄우고 싶으면? */}
+
+            {
+              count == 2 ? null : show && <button onClick={()=>{
+                setShow(false)
+                if ( count == 0) {
+                  setTimeout(()=>{
+                    axios.get('https://codingapple1.github.io/shop/data2.json')
+                    .then((result)=>{
+                      let copy = [...shoes]
+                      copy.push(...result.data)
+                      setShoes(copy)
+                      setCount(count+1)
+                      setShow(true)
+                    })
+                  },500)
+                  
+                  .catch(()=>{console.log('실패')})
+                }
+                if ( count == 1) {
+                  axios.get('https://codingapple1.github.io/shop/data3.json')
+                  .then((result)=>{
+                    let copy = [...shoes]
+                    copy.push(...result.data)
+                    setShoes(copy)
+                    setCount(count+1)
+                    setShow(true)
+                  })
+                  .catch(()=>{console.log('실패')})
+                }
+                if ( count == 2) { alert('더이상 상품이 없습니다.')}
+                
+              }}>더보기</button> 
+              
+            }
+
+            {
+              show == false ? <More/> : null
+            }
+            
+            
         </div>
       } />
 
@@ -83,6 +117,12 @@ function ShoesList(props){
     <p>{props.shoe.price}</p>
   </div>
     )
+}
+
+function More(){
+  return(
+    <div>로딩중</div>  
+  )
 }
 
 
