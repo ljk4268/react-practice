@@ -2,6 +2,7 @@ import './App.css';
 import { Navbar, Container, Nav } from 'react-bootstrap';
 import { useState } from 'react';
 import {Routes, Route, useNavigate, Outlet} from 'react-router-dom';
+import axios from 'axios';
 
 
 import data from './data'
@@ -10,7 +11,7 @@ import Detail from './routes/Detail'
 
 function App() {
 
-  let [shoes] = useState(data)
+  let [shoes, setShoes] = useState(data)
   let navigate = useNavigate();
 
 
@@ -46,15 +47,22 @@ function App() {
 
               </div>
             </div> 
-        </div>} />
+            {/* axios로 서버요청하기 */}
+            <button onClick={()=>{ 
+              axios.get('https://codingapple1.github.io/shop/data2.json')
+              .then((result)=>{
+                // 서버에서 받아온 데이터로 새로운 shoesList만들기
+                let copy = [...shoes]
+                copy.push(...result.data)
+                setShoes(copy)
+              })
+              // 서버요청이 실패했을 때는 catch!
+              .catch(()=>{console.log('실패')})
+            }}>버튼</button>
+        </div>
+      } />
 
-        {/* 디테일페이지 */}
-        {/* 페이지 여러개 만들고 싶을 때 :URL파라미터 쓰면됨 */}
-        {/* 페이지는 여러개인데 보이는 내용이 똑같음! */}
-        {/* 리액트 라우터적으로 보이는 내용을 다 다르게 만들고 싶다면!  */}
-        {/* /detail/0으로 접속하면 0번째 상품을 */}
-        {/* /detail/1으로 접속하면 1번째 상품을 */}
-        {/* /detail/2으로 접속하면 2번째 상품을 보여주게 만드는방법*/}
+        
         <Route path="/detail/:id" element={<Detail shoes={shoes}/>} />
       
       
