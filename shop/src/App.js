@@ -1,17 +1,19 @@
 import './App.css';
 import { Navbar, Container, Nav } from 'react-bootstrap';
-import { useState } from 'react';
+import { createContext, useState } from 'react';
 import {Routes, Route, useNavigate, Outlet} from 'react-router-dom';
 import axios from 'axios';
 
-
 import data from './data'
 import Detail from './routes/Detail'
+import Cart from './routes/Cart'
+
 
 
 function App() {
 
   let [shoes, setShoes] = useState(data)
+  let [재고] = useState([10, 11, 12])
   let [count, setCount] = useState(0)
   let [show, setShow] = useState(true)
   let navigate = useNavigate();
@@ -49,10 +51,6 @@ function App() {
 
               </div>
             </div> 
-            {/* axios로 서버요청하기 */}
-            {/* 응용1. 버튼을 2번 누르면 7,8,9번 상품을 가져와서 html로 보여주려면? */}
-            {/* 응용2. 버튼을 3번 누르면 더 상품이 없다고 안내문을 띄우려면? */}
-            {/* 응용3. 버튼을 누른 직후엔 "로딩중입니다" 이런 글자를 주변에 띄우고 싶으면? */}
 
             {
               count == 2 ? null : show && <button onClick={()=>{
@@ -97,7 +95,17 @@ function App() {
       } />
 
         
-        <Route path="/detail/:id" element={<Detail shoes={shoes}/>} />
+        <Route path="/detail/:id" element={
+          
+            <Detail shoes={shoes}/>
+          
+          }/>
+
+        <Route path="/cart" element={
+        
+          <Cart/>
+        
+        }/>
       
       
       </Routes>
@@ -110,7 +118,6 @@ function App() {
 
 function ShoesList(props){
   return(
-    // navigate함수 써서 각 목록 누를때마다 해당 detail페이지로 넘어가게 만들어줌. 
   <div className="col-md-4" onClick={()=>{ props.navigate(`/detail/${props.i}`) }}>
     <img src={"https://codingapple1.github.io/shop/shoes" + (props.i+1) + ".jpg"} width="80%"/>
     <h4>{props.shoe.title}</h4>
