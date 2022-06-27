@@ -63,18 +63,41 @@ function Detail(props){
     </div> 
     )
 }
-// JSX에 if문 넣고 싶을 때 컴포넌트를 만들면 됨. 
-// if문안에 꼭 return 써주기. 
+// 애니메이션 주는 법 
 function TabContent({tab}){
-    if( tab == 0 ) {
-      return <div>내용0</div>
+
+  let [fade, setFade] = useState('')
+
+
+  // tab이 변경될 때마다 실행되게 useEffect 코드 사용 
+  // tab이 변경될 때 setFade('end')이 실행되고 
+  // return으로 다시 원상복귀를 시킴. 
+  // 근데 두 코드가 한 번에 실행되면 리액트는 setFade('end')만 실행시키낟고함. 
+  // 그래서 setTimeout로 시간차를 두고 setFade('end')을 실행시키고 
+  // 타이머함수를 지워주는 clearTimeout(a)을 써줌. 
+  useEffect(()=>{
+    let a = setTimeout(()=>{ 
+      setFade('end')
+    },100)
+    return ()=>{
+      clearTimeout(a)
+      setFade('')
     }
-    if( tab == 1 ) {
-      return <div>내용1</div>
-    }
-    if( tab == 2 ) {
-      return <div>내용2</div>
-    }
+  },[tab])
+
+  return (
+    // 변경될 내용을 div태그엥 담아 className을 주고 
+    // tab state가 변할 때 마다 css를 변경해주기 위해 useEffect를 사용함. >>위 코드에서 설명
+    // css 'end'가 붙였다 떼어졌다 해야하니까 className에 변수로 넣어주고 
+    // className을 변수로 넣어줄 땐 {중괄호}로 넣어주면 됨. 
+    // useState로 css 'end'를 관리해줌. >> let [fade, setFade] = useState('')
+    <div className={`start ${fade}`}>
+      {
+        [<div>내용0</div>, <div>내용1</div>, <div>내용2</div>][tab]
+      }
+    </div>
+  )
+
 }
 
 
