@@ -2,6 +2,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Nav } from 'react-bootstrap';
+import { useDispatch } from "react-redux";
+import { addItem } from './../store.js'
+
 
 
 function Detail(props){
@@ -11,6 +14,7 @@ function Detail(props){
 
   let {id} = useParams();
   let shoe = props.shoes.find(shoe => shoe.id == id)
+  let dispatch = useDispatch()
 
   useEffect(()=>{
     let a = setTimeout(()=>{ setAlert(false) },2000)
@@ -37,7 +41,9 @@ function Detail(props){
           <h4 className="pt-5">{shoe.title}</h4>
           <p>{shoe.content}</p>
           <p>{shoe.price}원</p>
-          <button className="btn btn-danger">주문하기</button> 
+          <button className="btn btn-danger" onClick={()=>{
+            dispatch(addItem({id : `${shoe.id}`, name : `${shoe.title}`, count : 1}))
+          }}>주문하기</button> 
         </div>
       </div>
 

@@ -4,27 +4,8 @@
 
 
 import { configureStore, createSlice } from '@reduxjs/toolkit'
-
-
-// createSlice는 useState 역할임
-// // 여기는 state를 만드는 공간
-let user = createSlice({
-  name : 'user',
-  initialState: 'kim',
-  // 리덕스 state 변경하는 법
-  // 1. state 수정해주는함수 만들고
-  // 2. 원할 때 그 함수 실행해달라고 store.js에 요청하기
-  // state 수정하는 함수 만들기
-  reducers : {
-    changeName(state){ //기존 state를 의미함. 
-      return 'john ' + state
-    }
-  }
-})
-
-// 만든 수정함수 export 해야함
-export let { changeName } = user.actions
-
+// 파일 분할!
+import user  from './store/userSlice'
 
 
 let cart = createSlice({
@@ -32,18 +13,27 @@ let cart = createSlice({
   initialState: [
     {id : 0, name : 'White and Black', count : 2},
     {id : 2, name : 'Grey Yordan', count : 1}
-  ]
-  
-
+  ],
+  reducers : {
+    changeCount(state,action){
+      let idx = state.findIndex((a)=>{return a.id == action.payload})
+      state[idx].count++
+    },
+    addItem(state,action){
+      console.log(action.payload)
+      state.push(action.payload)
+    }
+  }
 })
+
+export let { changeCount, addItem } = cart.actions
 
 
 
 export default configureStore({
   // 여기는 state를 등록하는 공간
   reducer: {
-    user : user.reducer,
-    cart : cart.reducer
-  
+    cart : cart.reducer,
+    user : user.reducer
   }
 })

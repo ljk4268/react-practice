@@ -1,7 +1,8 @@
 import { Table } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 // redux state 변경함수 import 해오고 
-import { changeName } from './../store'
+import { changeName,changeAge } from './../store/userSlice'
+import { changeCount } from './..//store'
 
 // Reducx를 사용하면 컴포넌트들이 props 없이 state 공유가 가능하다. 
 
@@ -12,13 +13,16 @@ function Cart(){
 // state.작명 쓰면 내가 원하는 state만 가져다 쓸 수 있음 
   let cart = useSelector((state)=> state.cart )
   let user = useSelector((state)=> state.user )
+  console.log(user.age)
   // redux state 변경함수 사용할 수 있게 도와주는 useDispatch함수 변수로 만들어서 
   let dispatch = useDispatch()
 
   return(
     <div>
-
-    {user}의 장바구니
+      
+      <h6>{user.name} {user.age}의 장바구니</h6>
+      <button onClick={()=>{ dispatch(changeAge(100)) }}>버튼</button>
+      
 
       <Table>
         <thead>
@@ -36,12 +40,12 @@ function Cart(){
         {
           cart.map((shoes, i) => 
               <tr key={i}>
-                <td>1</td>
+                <td>{shoes.id}</td>
                 <td>{shoes.name}</td>
                 <td>{shoes.count}</td>
                 <td><button onClick={()=>{
-                // 변수 dispatch에 state변경함수 감싸주기 
-                  dispatch(changeName())
+                    dispatch(changeCount(shoes.id))
+                  
                 }}>+</button></td>
               </tr>
             )
