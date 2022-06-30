@@ -14,6 +14,7 @@ function App() {
   ])
 
   let content = null;
+  let contextControl = null;
   if (mode === 'WelCome!') {
     content = <Airticle title="Welcom" body="Hello, WEB"></Airticle>
   } else if (mode === 'read'){
@@ -25,6 +26,11 @@ function App() {
       }
     }
     content = <Airticle title={title} body={body}></Airticle>
+    contextControl = <li><a href={'/update/'+id} onClick={(e)=>{
+      e.preventDefault();
+      setMode('update')
+    }}>Update</a></li>
+
   } else if (mode === 'create'){
     content = <Create onCreate={(_title, _body)=>{
       const newTopic = {id: nextId, title: _title, body: _body}
@@ -35,6 +41,28 @@ function App() {
       setId(nextId);
       setNextId(nextId+1)
     }}></Create>
+  } else if ( mode === 'update'){
+    let title, body = null
+    for( let i=0; i< topics.length; i++ ){
+      if(topics[i].id === id) {
+        title = topics[i].title;
+        body = topics[i].body;
+      }
+    }
+    content = <Update title={title} body={body} onUpdate={(title, body)=>{
+      console.log(title, body)
+      const updatedTopic = {id: id, title: title, body: body}
+      const newTopics = [...topics]
+      for( let i=0; i< topics.length; i++){
+        if( newTopics[i].id === id){
+      const updatedTopic = {id: id, title: title, body: body}
+          newTopics[i] = updatedTopic
+          break
+        }
+      }
+      setTopics(newTopics)
+      setMode('read')
+    }}></Update>
   }
   return (
     <div>
@@ -47,12 +75,43 @@ function App() {
         setId(_id)
       }}></Nav>
       {content}
-      <a href="/create" onClick={(e)=>{
-        e.preventDefault();
-        setMode('create')
-      }}>Create</a>
+      <ul>
+        <li><a href="/create" onClick={(e)=>{
+          e.preventDefault();
+          setMode('create')
+        }}>Create</a></li>
+        {contextControl}
+      </ul>
     </div>
   );
+}
+
+function Update(props){
+  const [title, setTitle] = useState(props.title);
+  const [body, setBody] = useState(props.body);
+  return(
+    <article>
+      <h2>Update</h2>
+      <form onSubmit={(e)=>{
+        e.preventDefault();
+        const title = e.target.title.value;
+        const body = e.target.body.value;
+        props.onUpdate(title, body)
+      }}>
+        
+        <p><input type='text' name='title' placeholder='title' value={title} onChange={(e)=>{
+          console.log(e.target.value)
+          setTitle(e.target.value);
+        }}/></p>
+        <p><textarea name='body' placeholder='body' value={body} onChange={(e)=>{
+          setBody(e.target.value)
+        }}></textarea></p>
+        <p><input type='submit' value='Update'/></p>
+
+        
+      </form>
+    </article>   
+  )
 }
 
 function Create(props){
