@@ -26,10 +26,25 @@ function App() {
       }
     }
     content = <Airticle title={title} body={body}></Airticle>
-    contextControl = <li><a href={'/update/'+id} onClick={(e)=>{
-      e.preventDefault();
-      setMode('update')
-    }}>Update</a></li>
+    contextControl = <>
+      <li>
+        <a href={'/update/'+id} onClick={(e)=>{
+        e.preventDefault();
+        setMode('update')
+      }}>Update</a>
+      </li>
+      <li><input type='button' value='Delete' onClick={(e)=>{
+        const newTopics = []
+        for( let i=0; i< topics.length; i++ ){
+          if(topics[i].id !== id) {
+            newTopics.push(topics[i])
+          }
+        }
+        setTopics(newTopics)
+        setMode('WelCome!')
+
+      }}/></li>
+    </>
 
   } else if (mode === 'create'){
     content = <Create onCreate={(_title, _body)=>{
