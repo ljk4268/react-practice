@@ -14,6 +14,7 @@ function App() {
       <Header 
       title="REACT"
       // props는 함수도 전달 가능함! 
+      // 함수를 만들었고 이 함수가 어제 실행될지는 컴포넌트에서 작성해줌
       onChangeMode={()=>{
         alert('Header')
       }}
@@ -39,7 +40,7 @@ function Header(props){
         onClick={(e)=>{
           // 클릭해도 리로드가 되지 않게 막아줌 
           e.preventDefault();
-          // alert함수가 발동되게 해줌 
+          // title을 클릭했을 때 alert함수가 실행되게 해줌 
           props.onChangeMode()
         }
       }>{props.title}</a></h1>
