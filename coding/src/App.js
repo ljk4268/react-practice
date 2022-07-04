@@ -1,194 +1,74 @@
 import './App.css';
-import {useState} from 'react';
 
 
 
 function App() {
-  const [mode, setMode] = useState('WelCome!')
-  const [id, setId] = useState(null);
-  const [nextId, setNextId] = useState(4);
-  const [topics, setTopics] = useState([
-    {id:1, title: 'html', body: 'html is ...'},
-    {id:2, title: 'css', body: 'css is ...'},
-    {id:3, title: 'javascript', body: 'javascript is ...'}
-  ])
+  const topics = [
+    {id:1, title: 'html', body: ' html is...'},
+    {id:2, title: 'css', body: ' css is...'},
+    {id:3, title: 'javascript', body: ' javascript is...'}
+  ]
 
-  let content = null;
-  let contextControl = null;
-  if (mode === 'WelCome!') {
-    content = <Airticle title="Welcom" body="Hello, WEB"></Airticle>
-  } else if (mode === 'read'){
-    let title, body = null
-    for( let i=0; i< topics.length; i++ ){
-      if(topics[i].id === id) {
-        title = topics[i].title;
-        body = topics[i].body;
-      }
-    }
-    content = <Airticle title={title} body={body}></Airticle>
-    contextControl = <>
-      <li>
-        <a href={'/update/'+id} onClick={(e)=>{
-        e.preventDefault();
-        setMode('update')
-      }}>Update</a>
-      </li>
-      <li><input type='button' value='Delete' onClick={(e)=>{
-        const newTopics = []
-        for( let i=0; i< topics.length; i++ ){
-          if(topics[i].id !== id) {
-            newTopics.push(topics[i])
-          }
-        }
-        setTopics(newTopics)
-        setMode('WelCome!')
-
-      }}/></li>
-    </>
-
-  } else if (mode === 'create'){
-    content = <Create onCreate={(_title, _body)=>{
-      const newTopic = {id: nextId, title: _title, body: _body}
-      const newTopics = [...topics]
-      newTopics.push(newTopic)
-      setTopics(newTopics)
-      setMode('read')
-      setId(nextId);
-      setNextId(nextId+1)
-    }}></Create>
-  } else if ( mode === 'update'){
-    let title, body = null
-    for( let i=0; i< topics.length; i++ ){
-      if(topics[i].id === id) {
-        title = topics[i].title;
-        body = topics[i].body;
-      }
-    }
-    content = <Update title={title} body={body} onUpdate={(title, body)=>{
-      console.log(title, body)
-      const updatedTopic = {id: id, title: title, body: body}
-      const newTopics = [...topics]
-      for( let i=0; i< topics.length; i++){
-        if( newTopics[i].id === id){
-      const updatedTopic = {id: id, title: title, body: body}
-          newTopics[i] = updatedTopic
-          break
-        }
-      }
-      setTopics(newTopics)
-      setMode('read')
-    }}></Update>
-  }
   return (
     <div>
-      {/* 컴포넌트 = 사용자 정의 태그 */}
-      <Header title="WEB" onChangeMode={function(){
-        setMode('WelCome!')
-      }}></Header>
-      <Nav topics={topics} onChangeMode={(_id)=>{
-        setMode('read')
-        setId(_id)
-      }}></Nav>
-      {content}
-      <ul>
-        <li><a href="/create" onClick={(e)=>{
-          e.preventDefault();
-          setMode('create')
-        }}>Create</a></li>
-        {contextControl}
-      </ul>
+      {/* 리액트의 속성은 props */}
+      {/* 속성을 전달하는 방법은 아래처럼 컴포넌트를 가져다 쓰면서 작명과 변수 써주면됨 */}
+      <Header title="REACT"></Header>
+
+      {/* 위의 const topics 배열을 props로 전달하고 싶다면  중괄호로 감싸줘야한다. */}
+      {/* 그냥 topics='topics'로 전달하면 문자 그자체가 전달됨 */}
+      <Nav topics={topics}></Nav>
+
+      <Article title="Welcome" body="Hello, World!"></Article>
+
     </div>
   );
 }
 
-function Update(props){
-  const [title, setTitle] = useState(props.title);
-  const [body, setBody] = useState(props.body);
-  return(
-    <article>
-      <h2>Update</h2>
-      <form onSubmit={(e)=>{
-        e.preventDefault();
-        const title = e.target.title.value;
-        const body = e.target.body.value;
-        props.onUpdate(title, body)
-      }}>
-        
-        <p><input type='text' name='title' placeholder='title' value={title} onChange={(e)=>{
-          console.log(e.target.value)
-          setTitle(e.target.value);
-        }}/></p>
-        <p><textarea name='body' placeholder='body' value={body} onChange={(e)=>{
-          setBody(e.target.value)
-        }}></textarea></p>
-        <p><input type='submit' value='Update'/></p>
 
-        
-      </form>
-    </article>   
-  )
-}
 
-function Create(props){
-  return (
-    <article>
-      <h2>Create</h2>
-      <form onSubmit={(e)=>{
-        e.preventDefault();
-        const title = e.target.title.value;
-        const body = e.target.body.value;
-        props.onCreate(title, body)
-      }}>
-        
-        <p><input type='text' name='title' placeholder='title'/></p>
-        <p><textarea name='body' placeholder='body'></textarea></p>
-        <p><input type='submit' value='Create'/></p>
-
-        
-      </form>
-    </article>  
-  )
-}
-
+// 컴포넌트(=사용자 정의) 만드는 방법 function형 함수 문법 
+// props로 보내진 변수 받을 수 있음.
+// title: REACT라는 객체를 받아올 수 있는데 객체 문법에 따라서 
+// props.title하면 REACT를 보여줄 수 있음. 
 function Header(props){
   return(
     <header>
-      <h1><a href="/" onClick={function(e){
-      // 이벤트 상황을 제어할 수 있는 여러가지 기능이 있는데 
-      //e.preventDefault 함수를 사용하게 되면 a가 동작하는 기본동작을 방지함. 
-      // 기본동작을 방지하면 클릭해도 리로드가 되지 않는다. 
-        e.preventDefault();
-        props.onChangeMode();
-      }}>{props.title}</a></h1>
+        <h1><a href="/">{props.title}</a></h1>
     </header>
   )
 }
 
 function Nav(props){
   const lis = []
-  for( let i =0; i< props.topics.length; i++ ){
-    let t = props.topics[i];
-    lis.push(<li key={t.id}>
-      <a id = {t.id} href={'/read/'+t.id} onClick={(e)=>{
-        e.preventDefault();
-        props.onChangeMode(Number(e.target.id));
-      }}>{t.title}</a>
-      </li>)
+  // 위의 const topics를 하나씩 가져다 쓰고 싶어서 
+  // const topics이 배열이니까 
+  // for문으로 돌려줌 
+  for(let i =0; i < props.topics.length; i++){
+    let t = props.topics[i]
+    // 리액트가 const lis이라는 배열안에 내용을 하나씩 보여줄 수 있게 push로 내용 넣어줌 
+    // 리액트가 자동으로 만들어준 태그의 경우 리액트가 이 태그들을 추척을 할 때 근거를 주는 key임. > 성능에 좋다구함. 
+    lis.push(<li key={t.id}><a href={'/read/'+t.id}>{t.title}</a></li>)
   }
   return(
-    <ol>
-      {lis}
-    </ol>
+    <nav>
+      <ol>
+        {/* const lis = [] 가 있으니 컴포넌트 안에 중과로 써서 변수 이름 넣어주면 리액트가 알아서 화면에 배열을 하나씩 꺼내서 보여줌.  */}
+        {lis}
+      </ol>
+    </nav>
   )
 }
 
-function Airticle(props){
+function Article(props){
   return(
     <article>
       <h2>{props.title}</h2>
       {props.body}
-    </article>  
+    </article>
   )
 }
+
+
 
 export default App;
