@@ -37,12 +37,38 @@ function App() {
     }
 
     content = <Article title={title} body={body}></Article>
-    contextControl = <li><a href={'/update'+ id}
+    contextControl = 
+    <>
+    <li>
+      <a href={'/update'+ id}
       onClick={(e)=>{
         e.preventDefault();
         setMode('UPDATE');
       }}
-    >Update</a></li>
+      >Update</a>
+    </li>
+
+    {/* 삭제 기능 */}
+    {/* input태그로 버튼만들어주고  */}
+    <li><input type='button' value='Delete' onClick={()=>{
+    // 버튼 클릭하면 실행될 코드들 작성 
+    // 새로운 빈 배열 하나 만들어주고 
+      const newTopics = [];
+      // for문을 돌려줌 
+      for(let i = 0; i < topics.length; i++){
+        // 조건문으로 topics가 돌때마다 id를 비교하는데 
+        // 내가 클릭한 페이지이 id가 아닌 다른 페이지들만 
+        // 새롭게 만든 빈 배열에 넣어줌 
+        if(topics[i].id !== id ){
+          newTopics.push(topics[i])
+        }
+      }
+      // topics를 새로운 배열로 수정해주면 삭제 기능 완료 
+      setTopics(newTopics);
+      // 삭제되면 첫 페이지로 가기. 
+      setMode('WELCOME')
+    }}></input></li>
+    </>
 
   } else if ( mode === 'CREATE' ){
     content = <Create onCreate={(_title, _body)=>{
@@ -137,6 +163,9 @@ function App() {
   );
 }
 
+
+
+// 컴포넌트
 function Header(props){
   return(
     <header>
